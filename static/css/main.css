@@ -1,0 +1,147 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font-size: 14px;
+}
+.container {
+  width: 100%;
+  height: 100%;
+  background: rgb(202, 255, 193);
+  opacity: 1;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  overflow: hidden;
+}
+.element-wrapper {
+  width: 821px;
+  height: 550px;
+  background: rgb(202, 255, 193);
+  opacity: 1;
+  position: absolute;
+  top: 128px;
+  left: 96px;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex; /* Add this line to make sure the video covers the entire area */
+}
+
+#cameraFeed {
+  width: 100%; /* Set the video width to cover the entire container */
+  height: auto; /* Automatically adjust the height based on the width */
+  margin: 0; /* Remove any default margin */
+  padding: 0; /* Remove any default padding */
+}
+
+.title {
+  width: 409px;
+  color: rgba(89,136,49,1);
+  position: absolute;
+  top: 355px;
+  left: 206px;
+  font-family: Inter;
+  font-weight: Semi Bold;
+  font-size: 48px;
+  opacity: 1;
+  text-align: right;
+}
+.capture-button {
+  background-color: #1e6520; /* Green background color */
+  border: none; /* Remove border */
+  color: white; /* Text color */
+  padding: 15px 32px; /* Padding */
+  text-align: center; /* Center text horizontally */
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Make it an inline block element */
+  font-size: 25px; /* Font size */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 8px; /* Rounded corners */
+  margin-left: 55px;
+}
+
+.voice-box {
+  width: 371px;
+  height: 150px;
+  background: rgb(202, 255, 193);
+  opacity: 1;
+  position: absolute;
+  top: 300px;
+  left: 985px;
+  border-radius: 24px;
+  overflow: hidden;
+}
+.button-container {
+  width: 323px;
+  height: 159px;
+  padding: 10px 16px;
+  margin: 8px;
+  opacity: 1;
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.button-text {
+  width: 275px;
+  color: rgba(255,255,255,1);
+  position: absolute;
+  top: 12px;
+  left: 36px;
+  font-family: Irish Grover;
+  font-weight: Regular;
+  font-size: 64px;
+  opacity: 1;
+  text-align: left;
+}
+.voice-section {
+  width: 100%;
+  height: 112px;
+  background: url('background.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 1;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  overflow: hidden;
+}
+.voice-title {
+  width: 99px;
+  color: rgba(66,107,31,1);
+  position: absolute;
+  top: 41px;
+  left: 96px;
+  font-family: Newsreader;
+  font-weight: Medium;
+  font-size: 32px;
+  opacity: 1;
+  text-align: left;
+}
+.paper-voice {
+  width: 226px;
+  height: 48px;
+  background: rgba(66,107,31,1);
+  padding: 14px 23px;
+  margin: 8px;
+  opacity: 1;
+  position: absolute;
+  top: 32px;
+  left: 1118px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.paper-voice-text {
+  width: 213px;
+  color: rgba(255,255,255,1);
+  position: absolute;
+  top: 14px;
+  left: 13px;
+  font-family: Inter;
+  font-weight: Semi Bold;
+  font-size: 16px;
+  opacity: 1;
+  text-align: center;
+}

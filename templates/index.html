@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Irish+Grover&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Newsreader&display=swap" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet" />
+    <title>Document</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="element-wrapper">
+            <video id="cameraFeed" autoplay></video> <!-- Video element to display camera feed -->
+            <span class="title"></span>
+        </div>
+        <div class="voice-box">
+            <div class="button-container">
+                <button class="capture-button">Capture</button> <!-- Button to capture image -->
+            </div>
+        </div>
+        <div class="voice-section">
+            <span class="voice-title">VOICE</span>
+            <div class="paper-voice">
+                <span class="paper-voice-text">Paper-Voice</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cameraFeed = document.getElementById('cameraFeed');
+        const captureButton = document.querySelector('.capture-button');
+
+        // Access the user's camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                cameraFeed.srcObject = stream; // Display camera feed in the video element
+            })
+            .catch(error => {
+                console.error('Error accessing camera:', error);
+            });
+
+        // Function to speak countdown
+        function speakCountdown() {
+            // Delay for 1 second before starting the countdown
+            setTimeout(() => {
+                const countdownPhrases = ['Three', 'Two', 'One'];
+
+                countdownPhrases.forEach((phrase, index) => {
+                    setTimeout(() => {
+                        speak(phrase); // Speak the countdown phrase
+                    }, (index) * 1000); // Delay each phrase by 1 second
+                });
+
+                // Capture the image after countdown finishes
+                setTimeout(() => {
+                    captureImage();
+                }, (countdownPhrases.length) * 1000);
+            }, 1000);
+        }
+
+        // Function to speak a phrase
+        function speak(phrase) {
+            const utterance = new SpeechSynthesisUtterance(phrase);
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Function to speak out the detected currency
+        function speakDetectedCurrency(currency) {
+            const message = `Detected Currency: ${currency}`;
+            speak(message); // Speak the detected currency
+        }
+
+        // Function to capture and save image
+        function captureImage() {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            // Set the canvas dimensions to match the video feed
+            canvas.width = cameraFeed.videoWidth;
+            canvas.height = cameraFeed.videoHeight;
+
+            // Draw the current frame of the video onto the canvas
+            context.drawImage(cameraFeed, 0, 0);
+
+            // Convert the canvas content to a Blob object representing a JPEG image
+            canvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append('image', blob, 'test_currency.jpg');
+
+                // Send the image data to the Flask backend
+                fetch('/capture', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    // Find the prediction with the highest confidence
+                    let maxConfidence = 0;
+                    let maxConfidenceClass = null;
+
+                    for (const prediction of result.predictions) {
+                        if (prediction.confidence > maxConfidence) {
+                            maxConfidence = prediction.confidence;
+                            maxConfidenceClass = prediction.class;
+                        }
+                    }
+                    // Speak out the detected currency
+                    speakDetectedCurrency(maxConfidenceClass);
+                })
+                .catch(error => {
+                    console.error('Error performing inference:', error);
+                });
+            }, 'image/jpeg');
+        }
+
+        // Event listener for the capture button
+        captureButton.addEventListener('click', () => {
+            speakCountdown(); // Speak the countdown when capture button is clicked
+        });
+    </script>
+</body>
+
+</html>
