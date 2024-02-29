@@ -27,6 +27,7 @@
             <span class="voice-title">VOICE</span>
             <div class="paper-voice">
                 <span class="paper-voice-text">Paper-Voice</span>
+                <input type="file" id="fileInput" style="display: none;" accept="image/*">
             </div>
         </div>
     </div>
@@ -67,12 +68,6 @@
         function speak(phrase) {
             const utterance = new SpeechSynthesisUtterance(phrase);
             window.speechSynthesis.speak(utterance);
-        }
-
-        // Function to speak out the detected currency
-        function speakDetectedCurrency(currency) {
-            const message = `Detected Currency: ${currency}`;
-            speak(message); // Speak the detected currency
         }
 
         // Function to capture and save image
@@ -118,10 +113,53 @@
             }, 'image/jpeg');
         }
 
+        // Function to speak out the detected currency
+        function speakDetectedCurrency(currency) {
+            const message = `Detected Currency: ${currency}`;
+            speak(message); // Speak the detected currency
+        }
+
         // Event listener for the capture button
         captureButton.addEventListener('click', () => {
             speakCountdown(); // Speak the countdown when capture button is clicked
         });
+
+        // Event listener for the "Paper-Voice" span
+        document.querySelector('.paper-voice-text').addEventListener('click', () => {
+            // Trigger the file input click event
+            document.getElementById('fileInput').click();
+        });
+
+        // Event listener for file input change
+        document.getElementById('fileInput').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                // Perform OCR on the selected image file
+                handleFileUpload(file);
+            }
+        });
+
+        // Function to handle file upload and API call
+        // Function to handle file upload and API call
+function handleFileUpload(file) {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    // Send the image data to the Flask backend
+    fetch('/perform_ocr', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        // Speak the extracted text
+        speak(result.extracted_text);
+    })
+    .catch(error => {
+        console.error('Error performing OCR:', error);
+    });
+}
+
     </script>
 </body>
 
